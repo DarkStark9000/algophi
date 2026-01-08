@@ -1,7 +1,7 @@
 // quick.js
 /* eslint-disable */
 function disable() {
-  const allbtn = document.getElementsByClassName("navbtn");
+  const allbtn = document.querySelectorAll(".btn");
   for (let btn of allbtn) {
     btn.disabled = true;
     btn.classList.add("disabled");
@@ -9,11 +9,10 @@ function disable() {
 }
 
 function enable() {
-  const allbtn = document.getElementsByClassName("navbtn");
+  const allbtn = document.querySelectorAll(".btn");
   for (let btn of allbtn) {
     btn.disabled = false;
     btn.classList.remove("disabled");
-    btn.classList.add("enabled");
   }
 }
 
