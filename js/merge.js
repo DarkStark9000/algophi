@@ -1,109 +1,134 @@
-// merge.js
+// merge.js - Merge Sort Implementation
 /* eslint-disable */
-function disable() {
-  const allbtn = document.querySelectorAll(".btn");
-  for (let btn of allbtn) {
-    btn.disabled = true;
-    btn.classList.add("disabled");
-  }
-}
 
-function enable() {
-  const allbtn = document.querySelectorAll(".btn");
-  for (let btn of allbtn) {
-    btn.disabled = false;
-    btn.classList.remove("disabled");
-  }
-}
-
-async function mergeSort(delay = 100) {
+async function mergeSort() {
+  if (state.isSorting) return;
+  
+  state.isSorting = true;
+  state.isPaused = false;
+  state.shouldReset = false;
+  
   disable();
+  document.getElementById("pauseBtn").style.display = "flex";
+  showAlgorithmInfo('merge');
 
   let bars = document.querySelectorAll(".bar");
-  let speed = document.getElementById("sorts").value;
-  speed /= 10;
-  speed *= 100;
 
-  await mergeSortHelper(bars, 0, bars.length - 1, speed);
+  try {
+    await mergeSortHelper(bars, 0, bars.length - 1);
 
-  for (let i = 0; i < bars.length; i++) {
-    bars[i].style.backgroundColor = "rgb(49, 226, 13)"; // Green color for completed sort
+    // Mark all as sorted
+    for (let i = 0; i < bars.length; i++) {
+      bars[i].classList.remove("active", "comparing", "swapping");
+      bars[i].classList.add("sorted");
+    }
+  } catch (e) {
+    if (e.message === "RESET") {
+      // Reset triggered
+    }
   }
 
+  state.isSorting = false;
   enable();
 }
 
-async function mergeSortHelper(bars, l, r, speed) {
-  if (l >= r) return; // Base case: the array is of length 1
+async function mergeSortHelper(bars, l, r) {
+  if (l >= r) return;
 
   const m = l + Math.floor((r - l) / 2);
-  await mergeSortHelper(bars, l, m, speed);
-  await mergeSortHelper(bars, m + 1, r, speed);
-  await merge(bars, l, m, r, speed);
+  await mergeSortHelper(bars, l, m);
+  await mergeSortHelper(bars, m + 1, r);
+  await merge(bars, l, m, r);
 }
 
-async function merge(bars, l, m, r, speed) {
+async function merge(bars, l, m, r) {
   let n1 = m - l + 1;
   let n2 = r - m;
 
+  // Create temp arrays with both height and value
   let L = new Array(n1);
   let R = new Array(n2);
 
+  // Copy data and highlight left subarray
   for (let i = 0; i < n1; i++) {
-    L[i] = { height: bars[l + i].style.height, value: bars[l + i].childNodes[0].innerText };
-    bars[l + i].style.backgroundColor = "darkblue";
+    L[i] = { 
+      height: bars[l + i].style.height, 
+      value: bars[l + i].childNodes[0].innerText 
+    };
+    bars[l + i].classList.add("active");
   }
+  
+  // Highlight right subarray
   for (let j = 0; j < n2; j++) {
     R[j] = {
       height: bars[m + 1 + j].style.height,
       value: bars[m + 1 + j].childNodes[0].innerText,
     };
-    bars[m + 1 + j].style.backgroundColor = "red";
+    bars[m + 1 + j].classList.add("comparing");
   }
 
-  let i = 0;
-  let j = 0;
-  let k = l;
+  await delay();
 
+  let i = 0, j = 0, k = l;
+
+  // Merge back
   while (i < n1 && j < n2) {
-    if (parseInt(L[i].height) <= parseInt(R[j].height)) {
-      if (bars[k]) {
-        bars[k].style.height = L[i].height;
-        bars[k].childNodes[0].innerText = L[i].value;
-        bars[k].style.backgroundColor = "rgb(24, 190, 255)";
-      }
-      i++;
-    } else {
-      if (bars[k]) {
-        bars[k].style.height = R[j].height;
-        bars[k].childNodes[0].innerText = R[j].value;
-        bars[k].style.backgroundColor = "rgb(24, 190, 255)";
-      }
-      j++;
+    // Clear previous states in merge range
+    for (let x = l; x <= r; x++) {
+      bars[x].classList.remove("active", "comparing", "swapping");
     }
-    k++;
-    await new Promise((resolve) => setTimeout(resolve, speed));
-  }
+    
+    // Show current comparison
+    if (l + i <= m) bars[l + i].classList.add("active");
+    if (m + 1 + j <= r) bars[m + 1 + j].classList.add("comparing");
+    
+    await delay();
 
-  while (i < n1) {
-    if (bars[k]) {
+    if (parseInt(L[i].height) <= parseInt(R[j].height)) {
+      bars[k].classList.add("swapping");
       bars[k].style.height = L[i].height;
       bars[k].childNodes[0].innerText = L[i].value;
-      bars[k].style.backgroundColor = "rgb(24, 190, 255)";
-    }
-    i++;
-    k++;
-    await new Promise((resolve) => setTimeout(resolve, speed));
-  }
-
-  while (j < n2) {
-    if (bars[k]) {
+      i++;
+    } else {
+      bars[k].classList.add("swapping");
       bars[k].style.height = R[j].height;
       bars[k].childNodes[0].innerText = R[j].value;
-      bars[k].style.backgroundColor = "rgb(24, 190, 255)";
+      j++;
     }
+    
+    await delay();
+    bars[k].classList.remove("swapping");
+    k++;
+  }
+
+  // Copy remaining elements of L[]
+  while (i < n1) {
+    bars[k].classList.add("swapping");
+    bars[k].style.height = L[i].height;
+    bars[k].childNodes[0].innerText = L[i].value;
+    
+    await delay();
+    
+    bars[k].classList.remove("swapping");
+    i++;
+    k++;
+  }
+
+  // Copy remaining elements of R[]
+  while (j < n2) {
+    bars[k].classList.add("swapping");
+    bars[k].style.height = R[j].height;
+    bars[k].childNodes[0].innerText = R[j].value;
+    
+    await delay();
+    
+    bars[k].classList.remove("swapping");
     j++;
     k++;
-    await new Promise((resolve) => setTimeout(resolve, speed));
+  }
+
+  // Clear all states after merge
+  for (let x = l; x <= r; x++) {
+    bars[x].classList.remove("active", "comparing", "swapping");
   }
 }

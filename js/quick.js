@@ -1,67 +1,108 @@
-// quick.js
+// quick.js - Quick Sort Implementation
 /* eslint-disable */
-function disable() {
-  const allbtn = document.querySelectorAll(".btn");
-  for (let btn of allbtn) {
-    btn.disabled = true;
-    btn.classList.add("disabled");
-  }
-}
 
-function enable() {
-  const allbtn = document.querySelectorAll(".btn");
-  for (let btn of allbtn) {
-    btn.disabled = false;
-    btn.classList.remove("disabled");
-  }
-}
-
-async function quickSort(delay = 100) {
+async function quickSort() {
+  if (state.isSorting) return;
+  
+  state.isSorting = true;
+  state.isPaused = false;
+  state.shouldReset = false;
+  
   disable();
+  document.getElementById("pauseBtn").style.display = "flex";
+  showAlgorithmInfo('quick');
 
   let bars = document.querySelectorAll(".bar");
-  let speed = document.getElementById("sorts").value;
-  speed /= 10;
-  speed *= 100;
 
-  await quickSortHelper(bars, 0, bars.length - 1, speed);
+  try {
+    await quickSortHelper(bars, 0, bars.length - 1);
 
-  for (let i = 0; i < bars.length; i++) {
-    bars[i].style.backgroundColor = "rgb(49, 226, 13)"; // Green color for completed sort
+    // Mark all as sorted
+    for (let i = 0; i < bars.length; i++) {
+      bars[i].classList.remove("active", "comparing", "swapping");
+      bars[i].classList.add("sorted");
+    }
+  } catch (e) {
+    if (e.message === "RESET") {
+      // Reset triggered
+    }
   }
 
+  state.isSorting = false;
   enable();
 }
 
-async function quickSortHelper(bars, low, high, speed) {
+async function quickSortHelper(bars, low, high) {
   if (low < high) {
-    let pi = await partition(bars, low, high, speed);
-    await quickSortHelper(bars, low, pi - 1, speed);
-    await quickSortHelper(bars, pi + 1, high, speed);
+    let pi = await partition(bars, low, high);
+    await quickSortHelper(bars, low, pi - 1);
+    await quickSortHelper(bars, pi + 1, high);
+  } else if (low === high) {
+    // Single element is sorted
+    bars[low].classList.add("sorted");
   }
 }
 
-async function partition(bars, low, high, speed) {
+async function partition(bars, low, high) {
+  // Pivot is the last element
   let pivot = parseInt(bars[high].childNodes[0].innerHTML);
-  bars[high].style.backgroundColor = "darkblue";
+  
+  // Mark pivot as active
+  bars[high].classList.add("active");
+  
   let i = low - 1;
 
   for (let j = low; j <= high - 1; j++) {
+    // Mark current element as comparing
+    bars[j].classList.add("comparing");
+    
+    await delay();
+
     if (parseInt(bars[j].childNodes[0].innerHTML) < pivot) {
       i++;
-      swap(bars, i, j);
-      bars[i].style.backgroundColor = "red";
-      if (i !== j) bars[j].style.backgroundColor = "red";
-      await new Promise((resolve) => setTimeout(resolve, speed));
+      
+      if (i !== j) {
+        // Mark as swapping
+        bars[i].classList.add("swapping");
+        bars[j].classList.remove("comparing");
+        bars[j].classList.add("swapping");
+        
+        await delay();
+        
+        // Swap
+        swapBars(bars, i, j);
+        
+        await delay();
+        
+        bars[i].classList.remove("swapping");
+        bars[j].classList.remove("swapping");
+      }
     }
+    
+    bars[j].classList.remove("comparing");
   }
-  swap(bars, i + 1, high);
-  bars[high].style.backgroundColor = "rgb(24, 190, 255)";
-  bars[i + 1].style.backgroundColor = "rgb(49, 226, 13)";
+
+  // Swap pivot to its correct position
+  bars[i + 1].classList.add("swapping");
+  bars[high].classList.remove("active");
+  bars[high].classList.add("swapping");
+  
+  await delay();
+  
+  swapBars(bars, i + 1, high);
+  
+  await delay();
+  
+  bars[i + 1].classList.remove("swapping");
+  bars[high].classList.remove("swapping");
+  
+  // Pivot is now in sorted position
+  bars[i + 1].classList.add("sorted");
+  
   return i + 1;
 }
 
-function swap(bars, i, j) {
+function swapBars(bars, i, j) {
   let tempHeight = bars[i].style.height;
   let tempLabel = bars[i].childNodes[0].innerText;
   bars[i].style.height = bars[j].style.height;

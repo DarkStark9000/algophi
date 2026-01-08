@@ -1,79 +1,91 @@
+// insertion.js - Insertion Sort Implementation
 /* eslint-disable */
 
-function disable() {
-  const allbtn = document.querySelectorAll(".btn");
-  for (let btn of allbtn) {
-    btn.disabled = true;
-    btn.classList.add("disabled");
-  }
-}
-
-function enable() {
-  const allbtn = document.querySelectorAll(".btn");
-  for (let btn of allbtn) {
-    btn.disabled = false;
-    btn.classList.remove("disabled");
-  }
-}
-
-
-async function insertionSort(delay = 3) {
+async function insertionSort() {
+  if (state.isSorting) return;
+  
+  state.isSorting = true;
+  state.isPaused = false;
+  state.shouldReset = false;
+  
   disable();
-
-  let speed = document.getElementById("sorts").value;
-
-  speed /= 10;
-  speed *= 100;
+  document.getElementById("pauseBtn").style.display = "flex";
+  showAlgorithmInfo('insertion');
 
   const bars = document.querySelectorAll(".bar");
-  let key = 0,
-    j = 0;
 
-  for (let i = 0; i < bars.length; i += 1) {
-    // key = bars[i];
-    bars[i].style.backgroundColor = "darkblue";
-    key = parseInt(bars[i].childNodes[0].innerHTML);
+  try {
+    // First element is already "sorted"
+    bars[0].classList.add("sorted");
 
-    const key1 = bars[i].style.height;
-    const key2 = bars[i].childNodes[0].innerText;
+    for (let i = 1; i < bars.length; i++) {
+      clearBarStates(bars);
+      
+      // Re-mark sorted portion
+      for (let s = 0; s < i; s++) {
+        bars[s].classList.add("sorted");
+      }
+      
+      // Current element to insert
+      bars[i].classList.add("active");
+      
+      const keyHeight = bars[i].style.height;
+      const keyValue = bars[i].childNodes[0].innerText;
+      
+      await delay();
 
-    j = i - 1;
+      let j = i - 1;
 
-    while (j >= 0 && parseInt(bars[j].childNodes[0].innerHTML) > key) {
-      bars[j].style.backgroundColor = "red";
+      while (j >= 0 && parseInt(bars[j].childNodes[0].innerHTML) > parseInt(keyValue)) {
+        clearBarStates(bars);
+        
+        // Re-mark sorted portion
+        for (let s = 0; s <= j; s++) {
+          bars[s].classList.add("sorted");
+        }
+        
+        // Mark comparing elements
+        bars[j].classList.remove("sorted");
+        bars[j].classList.add("comparing");
+        bars[j + 1].classList.add("swapping");
 
-      await new Promise((resolve) =>
-        setTimeout(() => {
-          resolve();
-        }, speed)
-      );
+        await delay();
 
-      // bars[j + 1] = bars[j];
+        // Shift element right
+        bars[j + 1].style.height = bars[j].style.height;
+        bars[j + 1].childNodes[0].innerText = bars[j].childNodes[0].innerText;
 
-      const temp1 = bars[j].style.height;
-      const temp2 = bars[j].childNodes[0].innerText;
-      // bars[j].style.height = bars[j + 1].style.height;
-      bars[j + 1].style.height = temp1;
-      // bars[j].childNodes[0].innerText = bars[j + 1].childNodes[0].innerText;
-      bars[j + 1].childNodes[0].innerText = temp2;
+        await delay();
 
-      bars[j].style.backgroundColor = "rgb(24, 190, 255)";
+        j--;
+      }
 
-      j = j - 1;
+      // Insert key at correct position
+      bars[j + 1].style.height = keyHeight;
+      bars[j + 1].childNodes[0].innerText = keyValue;
+      
+      // Mark as swapping momentarily
+      clearBarStates(bars);
+      for (let s = 0; s <= i; s++) {
+        bars[s].classList.add("sorted");
+      }
+      bars[j + 1].classList.remove("sorted");
+      bars[j + 1].classList.add("swapping");
+      
+      await delay();
     }
 
-    await new Promise((resolve) =>
-      setTimeout(() => {
-        resolve();
-      }, 3)
-    );
-
-    bars[j + 1].style.height = key1;
-    bars[j + 1].childNodes[0].innerText = key2; // key;
-  }
-  for (let i = bars.length - 1; i >= 0; --i) {
-    bars[i].style.backgroundColor = "rgb(49, 226, 13)"; // green
+    // Final: all sorted
+    clearBarStates(bars);
+    for (let i = 0; i < bars.length; i++) {
+      bars[i].classList.add("sorted");
+    }
+  } catch (e) {
+    if (e.message === "RESET") {
+      // Reset triggered
+    }
   }
 
+  state.isSorting = false;
   enable();
 }
