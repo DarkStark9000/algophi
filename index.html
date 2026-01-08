@@ -8,8 +8,8 @@
     <!-- Primary Meta Tags -->
     <title>Algophi - Algorithm Visualizer | Learn Sorting Algorithms | Debarshi Das</title>
     <meta name="title" content="Algophi - Algorithm Visualizer | Learn Sorting Algorithms | Debarshi Das" />
-    <meta name="description" content="Interactive sorting algorithm visualizer by Debarshi Das. Learn Bubble Sort, Quick Sort, Merge Sort, Insertion Sort, and Selection Sort with step-by-step visual animations. Perfect for computer science students and coding interview preparation." />
-    <meta name="keywords" content="Debarshi Das, debarshidas.dev, algorithm visualizer, sorting algorithms, learn algorithms, bubble sort, quick sort, merge sort, insertion sort, selection sort, data structures, computer science, coding interview, DSA, algorithm animation, visual learning, programming tutorial" />
+    <meta name="description" content="Interactive sorting algorithm visualizer by Debarshi Das. Learn Bubble Sort, Quick Sort, Merge Sort, Heap Sort, Shell Sort, Insertion Sort, and Selection Sort with step-by-step visual animations. Perfect for computer science students and coding interview preparation." />
+    <meta name="keywords" content="Debarshi Das, debarshidas.dev, algorithm visualizer, sorting algorithms, learn algorithms, bubble sort, quick sort, merge sort, heap sort, shell sort, insertion sort, selection sort, data structures, computer science, coding interview, DSA, algorithm animation, visual learning, programming tutorial, time complexity" />
     <meta name="author" content="Debarshi Das" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://algophi.netlify.app" />
@@ -18,14 +18,14 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://algophi.netlify.app/" />
     <meta property="og:title" content="Algophi - Algorithm Visualizer | Learn Sorting Algorithms" />
-    <meta property="og:description" content="Interactive sorting algorithm visualizer. Learn Bubble Sort, Quick Sort, Merge Sort with step-by-step visual animations. Built by Debarshi Das." />
+    <meta property="og:description" content="Interactive sorting algorithm visualizer. Learn Bubble Sort, Quick Sort, Merge Sort, Heap Sort with step-by-step visual animations. Built by Debarshi Das." />
     <meta property="og:site_name" content="Algophi" />
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://algophi.netlify.app/" />
     <meta property="twitter:title" content="Algophi - Algorithm Visualizer | Learn Sorting Algorithms" />
-    <meta property="twitter:description" content="Interactive sorting algorithm visualizer. Learn Bubble Sort, Quick Sort, Merge Sort with step-by-step visual animations. Built by Debarshi Das." />
+    <meta property="twitter:description" content="Interactive sorting algorithm visualizer. Learn Bubble Sort, Quick Sort, Merge Sort, Heap Sort with step-by-step visual animations. Built by Debarshi Das." />
     <meta property="twitter:creator" content="@debarshidas" />
 
     <!-- Structured Data -->
@@ -48,7 +48,7 @@
         "price": "0",
         "priceCurrency": "USD"
       },
-      "keywords": "sorting algorithms, algorithm visualizer, bubble sort, quick sort, merge sort, learn algorithms, Debarshi Das"
+      "keywords": "sorting algorithms, algorithm visualizer, bubble sort, quick sort, merge sort, heap sort, shell sort, learn algorithms, Debarshi Das, time complexity"
     }
     </script>
 
@@ -126,21 +126,28 @@
           </div>
         </div>
 
+        <!-- Algorithms ordered by time complexity: O(n log n) -> O(n²) -->
         <div class="control-group control-group--algorithms">
-          <button type="button" class="btn btn--algo" onclick="bubbleSort()">
-            Bubble
-          </button>
-          <button type="button" class="btn btn--algo" onclick="insertionSort()">
-            Insertion
-          </button>
-          <button type="button" class="btn btn--algo" onclick="selectionSort()">
-            Selection
-          </button>
-          <button type="button" class="btn btn--algo" onclick="quickSort()">
+          <button type="button" class="btn btn--algo btn--fast" onclick="quickSort()" title="O(n log n) avg">
             Quick
           </button>
-          <button type="button" class="btn btn--algo" onclick="mergeSort()">
+          <button type="button" class="btn btn--algo btn--fast" onclick="mergeSort()" title="O(n log n)">
             Merge
+          </button>
+          <button type="button" class="btn btn--algo btn--fast" onclick="heapSort()" title="O(n log n)">
+            Heap
+          </button>
+          <button type="button" class="btn btn--algo btn--medium" onclick="shellSort()" title="O(n^1.25)">
+            Shell
+          </button>
+          <button type="button" class="btn btn--algo btn--slow" onclick="insertionSort()" title="O(n²)">
+            Insertion
+          </button>
+          <button type="button" class="btn btn--algo btn--slow" onclick="selectionSort()" title="O(n²)">
+            Selection
+          </button>
+          <button type="button" class="btn btn--algo btn--slow" onclick="bubbleSort()" title="O(n²)">
+            Bubble
           </button>
         </div>
       </nav>
@@ -167,6 +174,63 @@
           <span class="legend-color legend-color--sorted"></span>
           <span>Sorted</span>
         </div>
+        <button id="infoToggle" class="info-toggle" onclick="toggleInfoPanel()" title="Show algorithm info">
+          <span class="info-toggle-icon">i</span>
+        </button>
+      </div>
+
+      <!-- Algorithm Info Panel -->
+      <div id="algoInfoPanel" class="algo-info-panel">
+        <div class="algo-info-header">
+          <h3 id="algoName">Algorithm Name</h3>
+          <button class="algo-info-close" onclick="hideAlgorithmInfo()">&times;</button>
+        </div>
+        
+        <p id="algoDescription" class="algo-description"></p>
+        
+        <!-- Time Complexity -->
+        <div class="complexity-grid">
+          <div class="complexity-item">
+            <span class="complexity-label">Best</span>
+            <span id="complexityBest" class="complexity-value complexity--best">O(n)</span>
+          </div>
+          <div class="complexity-item">
+            <span class="complexity-label">Average</span>
+            <span id="complexityAvg" class="complexity-value complexity--avg">O(n²)</span>
+          </div>
+          <div class="complexity-item">
+            <span class="complexity-label">Worst</span>
+            <span id="complexityWorst" class="complexity-value complexity--worst">O(n²)</span>
+          </div>
+          <div class="complexity-item">
+            <span class="complexity-label">Space</span>
+            <span id="complexitySpace" class="complexity-value complexity--space">O(1)</span>
+          </div>
+        </div>
+        
+        <!-- C++ Code Section -->
+        <div class="code-section">
+          <div class="code-header" onclick="toggleCodeSection('cpp')">
+            <span>C++ Implementation</span>
+            <span id="cppToggle" class="toggle-icon">▼</span>
+          </div>
+          <div id="cppContent" class="code-content">
+            <pre><code id="cppCode"></code></pre>
+            <button id="copyCpp" class="btn btn--copy" onclick="copyToClipboard('cpp')">Copy C++</button>
+          </div>
+        </div>
+        
+        <!-- Pseudocode Section -->
+        <div class="code-section">
+          <div class="code-header" onclick="toggleCodeSection('pseudo')">
+            <span>Pseudocode</span>
+            <span id="pseudoToggle" class="toggle-icon">▼</span>
+          </div>
+          <div id="pseudoContent" class="code-content">
+            <pre><code id="pseudoCode"></code></pre>
+            <button id="copyPseudo" class="btn btn--copy" onclick="copyToClipboard('pseudo')">Copy Pseudocode</button>
+          </div>
+        </div>
       </div>
 
       <main class="visualizer">
@@ -174,19 +238,21 @@
       </main>
 
       <footer class="footer">
-        <a href="https://debarshidas.dev" target="_blank" rel="noopener noreferrer" class="footer-link">
-          debarshidas.dev
+        <a href="https://debarshidas.dev" target="_blank" rel="noopener noreferrer" class="signature">
+          <span class="signature-dash">&mdash;</span>
+          <span class="signature-name">debarshidas</span>
         </a>
-        <span class="footer-separator">:</span>
-        <span class="footer-name">Debarshi Das</span>
       </footer>
     </div>
 
+    <script type="text/javascript" src="js/algorithms-data.js"></script>
     <script type="text/javascript" src="app.js"></script>
     <script type="text/javascript" src="js/bubble.js"></script>
     <script type="text/javascript" src="js/insertion.js"></script>
     <script type="text/javascript" src="js/selection.js"></script>
     <script type="text/javascript" src="js/quick.js"></script>
     <script type="text/javascript" src="js/merge.js"></script>
+    <script type="text/javascript" src="js/heap.js"></script>
+    <script type="text/javascript" src="js/shell.js"></script>
   </body>
 </html>

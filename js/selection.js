@@ -10,6 +10,7 @@ async function selectionSort() {
   
   disable();
   document.getElementById("pauseBtn").style.display = "flex";
+  showAlgorithmInfo('selection');
 
   const bars = document.querySelectorAll(".bar");
 

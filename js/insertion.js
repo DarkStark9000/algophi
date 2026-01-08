@@ -10,6 +10,7 @@ async function insertionSort() {
   
   disable();
   document.getElementById("pauseBtn").style.display = "flex";
+  showAlgorithmInfo('insertion');
 
   const bars = document.querySelectorAll(".bar");
 

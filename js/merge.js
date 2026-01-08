@@ -10,6 +10,7 @@ async function mergeSort() {
   
   disable();
   document.getElementById("pauseBtn").style.display = "flex";
+  showAlgorithmInfo('merge');
 
   let bars = document.querySelectorAll(".bar");
 

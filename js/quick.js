@@ -10,6 +10,7 @@ async function quickSort() {
   
   disable();
   document.getElementById("pauseBtn").style.display = "flex";
+  showAlgorithmInfo('quick');
 
   let bars = document.querySelectorAll(".bar");
 

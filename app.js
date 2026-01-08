@@ -140,6 +140,15 @@ function updateControlButtons() {
 }
 
 // ===========================================
+// UTILITY: CLEAR BAR VISUAL STATES
+// ===========================================
+function clearBarStates(bars) {
+  for (let bar of bars) {
+    bar.classList.remove("active", "comparing", "swapping", "sorted");
+  }
+}
+
+// ===========================================
 // UTILITY: DELAY WITH PAUSE/RESET CHECK
 // ===========================================
 async function delay() {

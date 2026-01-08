@@ -39,6 +39,7 @@ async function bubbleSort() {
   
   disable();
   document.getElementById("pauseBtn").style.display = "flex";
+  showAlgorithmInfo('bubble');
 
   let bars = document.querySelectorAll(".bar");
   let n = bars.length;
