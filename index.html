@@ -1,93 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
+    <title>Algophi - Algorithm Visualizer | Learn Sorting Algorithms | Debarshi Das</title>
+    <meta name="title" content="Algophi - Algorithm Visualizer | Learn Sorting Algorithms | Debarshi Das" />
+    <meta name="description" content="Interactive sorting algorithm visualizer by Debarshi Das. Learn Bubble Sort, Quick Sort, Merge Sort, Insertion Sort, and Selection Sort with step-by-step visual animations. Perfect for computer science students and coding interview preparation." />
+    <meta name="keywords" content="Debarshi Das, debarshidas.dev, algorithm visualizer, sorting algorithms, learn algorithms, bubble sort, quick sort, merge sort, insertion sort, selection sort, data structures, computer science, coding interview, DSA, algorithm animation, visual learning, programming tutorial" />
+    <meta name="author" content="Debarshi Das" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://algophi.netlify.app" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://algophi.netlify.app/" />
+    <meta property="og:title" content="Algophi - Algorithm Visualizer | Learn Sorting Algorithms" />
+    <meta property="og:description" content="Interactive sorting algorithm visualizer. Learn Bubble Sort, Quick Sort, Merge Sort with step-by-step visual animations. Built by Debarshi Das." />
+    <meta property="og:site_name" content="Algophi" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://algophi.netlify.app/" />
+    <meta property="twitter:title" content="Algophi - Algorithm Visualizer | Learn Sorting Algorithms" />
+    <meta property="twitter:description" content="Interactive sorting algorithm visualizer. Learn Bubble Sort, Quick Sort, Merge Sort with step-by-step visual animations. Built by Debarshi Das." />
+    <meta property="twitter:creator" content="@debarshidas" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Algophi - Algorithm Visualizer</title>
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Algophi",
+      "description": "Interactive sorting algorithm visualizer for learning computer science fundamentals",
+      "url": "https://algophi.netlify.app",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Any",
+      "author": {
+        "@type": "Person",
+        "name": "Debarshi Das",
+        "url": "https://debarshidas.dev"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "keywords": "sorting algorithms, algorithm visualizer, bubble sort, quick sort, merge sort, learn algorithms, Debarshi Das"
+    }
+    </script>
 
-  <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet" />
-</head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Mobile Overlay -->
+    <div id="mobileOverlay" class="mobile-overlay">
+      <div class="mobile-overlay-content">
+        <div class="mobile-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+            <line x1="12" y1="18" x2="12" y2="18"></line>
+          </svg>
+          <svg class="rotate-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 4v6h-6M1 20v-6h6"></path>
+            <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"></path>
+          </svg>
+        </div>
+        <h2>Rotate Your Device</h2>
+        <p>For the best experience, please rotate your phone to landscape mode or use a tablet/desktop.</p>
+      </div>
+    </div>
 
-<body>
-  <div class="app-container">
-    <header class="header">
-      <div class="logo-section">
-        <a href="/" class="logo">
-          <span class="logo-bracket">[</span>
-          <span class="logo-text">Algophi</span>
-          <span class="logo-bracket">]</span>
+    <div class="app-container">
+      <header class="header">
+        <div class="logo-section">
+          <a href="/" class="logo">
+            <span class="logo-bracket">[</span>
+            <span class="logo-text">Algophi</span>
+            <span class="logo-bracket">]</span>
+          </a>
+          <p class="tagline">// visualize sorting algorithms</p>
+        </div>
+      </header>
+
+      <nav class="controls">
+        <div class="control-group control-group--primary">
+          <button type="button" class="btn btn--accent" id="newbtn" onclick="newArray()">
+            <span class="btn-icon">+</span>
+            New Array
+          </button>
+          <button type="button" class="btn btn--reset" id="resetBtn" onclick="resetSort()">
+            Reset
+          </button>
+          <button type="button" class="btn btn--pause" id="pauseBtn" onclick="pauseSort()" style="display: none;">
+            Pause
+          </button>
+          <button type="button" class="btn btn--resume" id="resumeBtn" onclick="resumeSort()" style="display: none;">
+            Resume
+          </button>
+        </div>
+
+        <div class="control-group control-group--sliders">
+          <div class="slider-control">
+            <label for="barc">
+              <span class="slider-label">Array Size</span>
+              <span class="slider-value" id="barc-val">25</span>
+            </label>
+            <input type="range" id="barc" min="5" max="100" step="1" value="25" />
+          </div>
+          <div class="slider-control">
+            <label for="sorts">
+              <span class="slider-label">Speed</span>
+              <span class="slider-value" id="sorts-val">50</span>
+            </label>
+            <input type="range" id="sorts" min="1" max="100" step="1" value="50" />
+          </div>
+        </div>
+
+        <div class="control-group control-group--algorithms">
+          <button type="button" class="btn btn--algo" onclick="bubbleSort()">
+            Bubble
+          </button>
+          <button type="button" class="btn btn--algo" onclick="insertionSort()">
+            Insertion
+          </button>
+          <button type="button" class="btn btn--algo" onclick="selectionSort()">
+            Selection
+          </button>
+          <button type="button" class="btn btn--algo" onclick="quickSort()">
+            Quick
+          </button>
+          <button type="button" class="btn btn--algo" onclick="mergeSort()">
+            Merge
+          </button>
+        </div>
+      </nav>
+
+      <!-- Legend -->
+      <div class="legend">
+        <div class="legend-item">
+          <span class="legend-color legend-color--default"></span>
+          <span>Unsorted</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color legend-color--active"></span>
+          <span>Active</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color legend-color--comparing"></span>
+          <span>Comparing</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color legend-color--swapping"></span>
+          <span>Swapping</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color legend-color--sorted"></span>
+          <span>Sorted</span>
+        </div>
+      </div>
+
+      <main class="visualizer">
+        <div class="content"></div>
+      </main>
+
+      <footer class="footer">
+        <a href="https://debarshidas.dev" target="_blank" rel="noopener noreferrer" class="footer-link">
+          debarshidas.dev
         </a>
-        <p class="tagline">// visualize sorting algorithms</p>
-      </div>
-    </header>
+        <span class="footer-separator">:</span>
+        <span class="footer-name">Debarshi Das</span>
+      </footer>
+    </div>
 
-    <nav class="controls">
-      <div class="control-group control-group--primary">
-        <button type="button" class="btn btn--accent" id="newbtn" onClick="newArray()">
-          <span class="btn-icon">+</span>
-          New Array
-        </button>
-      </div>
-
-      <div class="control-group control-group--sliders">
-        <div class="slider-control">
-          <label for="barc">
-            <span class="slider-label">Array Size</span>
-            <span class="slider-value" id="barc-val">25</span>
-          </label>
-          <input type="range" id="barc" min="5" max="100" step="1" value="25" />
-        </div>
-        <div class="slider-control">
-          <label for="sorts">
-            <span class="slider-label">Speed</span>
-            <span class="slider-value" id="sorts-val">50</span>
-          </label>
-          <input type="range" id="sorts" min="1" max="100" step="1" value="50" />
-        </div>
-      </div>
-
-      <div class="control-group control-group--algorithms">
-        <button type="button" class="btn btn--algo" onClick="bubbleSort()">
-          Bubble
-        </button>
-        <button type="button" class="btn btn--algo" onClick="insertionSort()">
-          Insertion
-        </button>
-        <button type="button" class="btn btn--algo" onClick="selectionSort()">
-          Selection
-        </button>
-        <button type="button" class="btn btn--algo" onClick="quickSort()">
-          Quick
-        </button>
-        <button type="button" class="btn btn--algo" onClick="mergeSort()">
-          Merge
-        </button>
-      </div>
-    </nav>
-
-    <main class="visualizer">
-      <div class="content"></div>
-    </main>
-
-    <footer class="footer">
-      <span class="footer-text">// built to learn, built to visualize</span>
-    </footer>
-  </div>
-
-  <script type="text/javascript" src="js/insertion.js"></script>
-  <script type="text/javascript" src="js/selection.js"></script>
-  <script type="text/javascript" src="js/quick.js"></script>
-  <script type="text/javascript" src="js/merge.js"></script>
-  <script type="text/javascript" src="js/bubble.js"></script>
-  <script type="text/javascript" src="app.js"></script>
-</body>
-
+    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="js/bubble.js"></script>
+    <script type="text/javascript" src="js/insertion.js"></script>
+    <script type="text/javascript" src="js/selection.js"></script>
+    <script type="text/javascript" src="js/quick.js"></script>
+    <script type="text/javascript" src="js/merge.js"></script>
+  </body>
 </html>
