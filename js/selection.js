@@ -1,18 +1,18 @@
 /* eslint-disable */
-// const allbtn = document.getElementsByClassName("navbtn");
 
 function disable() {
-  for (btn of allbtn) {
+  const allbtn = document.querySelectorAll(".btn");
+  for (let btn of allbtn) {
     btn.disabled = true;
     btn.classList.add("disabled");
   }
 }
 
 function enable() {
-  for (btn of allbtn) {
+  const allbtn = document.querySelectorAll(".btn");
+  for (let btn of allbtn) {
     btn.disabled = false;
     btn.classList.remove("disabled");
-    btn.classList.add("enabled");
   }
 }
 
@@ -45,11 +45,11 @@ async function selectionSort(delay = 3) {
 
       if (val1 < val2) {
         if (min_idx !== i) {
-          bars[min_idx].style.backgroundColor = "  rgb(24, 190, 255)";
+          bars[min_idx].style.backgroundColor = "rgb(24, 190, 255)";
         }
         min_idx = j;
       } else {
-        bars[j].style.backgroundColor = "  rgb(24, 190, 255)";
+        bars[j].style.backgroundColor = "rgb(24, 190, 255)";
       }
     }
 

@@ -1,19 +1,18 @@
 /* eslint-disable */
 
-// const allbtn = document.getElementsByClassName("navbtn");
-
 function disable() {
-  for (btn of allbtn) {
+  const allbtn = document.querySelectorAll(".btn");
+  for (let btn of allbtn) {
     btn.disabled = true;
     btn.classList.add("disabled");
   }
 }
 
 function enable() {
-  for (btn of allbtn) {
+  const allbtn = document.querySelectorAll(".btn");
+  for (let btn of allbtn) {
     btn.disabled = false;
     btn.classList.remove("disabled");
-    btn.classList.add("enabled");
   }
 }
 
@@ -58,7 +57,7 @@ async function insertionSort(delay = 3) {
       // bars[j].childNodes[0].innerText = bars[j + 1].childNodes[0].innerText;
       bars[j + 1].childNodes[0].innerText = temp2;
 
-      bars[j].style.backgroundColor = "  rgb(24, 190, 255)";
+      bars[j].style.backgroundColor = "rgb(24, 190, 255)";
 
       j = j - 1;
     }

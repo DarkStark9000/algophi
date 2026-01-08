@@ -1,104 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Algophi</title>
 
-    <link rel="stylesheet" href="style.css" />
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Algophi - Algorithm Visualizer</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=Poppins:wght@200;300;400;500;600&display=swap"
-      rel="stylesheet"
-    />
+  <link rel="stylesheet" href="style.css" />
 
-    <base target="_blank" />
-  </head>
-  <body>
-    <div class="header">
-      <a href="https://algophi.netlify.app"
-        ><span class="caption">Algophi</span>
-      </a>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+</head>
 
-      <span class="subcap">Visualise your Algos!</span>
-    </div>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <div class="logo-section">
+        <a href="/" class="logo">
+          <span class="logo-bracket">[</span>
+          <span class="logo-text">Algophi</span>
+          <span class="logo-bracket">]</span>
+        </a>
+        <p class="tagline">// visualize sorting algorithms</p>
+      </div>
+    </header>
 
-    <div class="navbar">
-      <div class="newarray">
-        <button
-          type="button"
-          class="navbar navbtn newarr"
-          id="newbtn"
-          onClick="newArray()"
-        >
+    <nav class="controls">
+      <div class="control-group control-group--primary">
+        <button type="button" class="btn btn--accent" id="newbtn" onClick="newArray()">
+          <span class="btn-icon">+</span>
           New Array
         </button>
       </div>
 
-      <div class="bar_prop">
-        <div class="bar_count">
-          <p>Change Bar Count</p>
-          <input type="range" id="barc" min="1" max="100" step="1" />
+      <div class="control-group control-group--sliders">
+        <div class="slider-control">
+          <label for="barc">
+            <span class="slider-label">Array Size</span>
+            <span class="slider-value" id="barc-val">25</span>
+          </label>
+          <input type="range" id="barc" min="5" max="100" step="1" value="25" />
         </div>
-        <div class="sort_speed">
-          <p>Change Sort Speed</p>
-          <p class="sort_p">
-            Min<input type="range" id="sorts" min="1" max="100" step="1" />Max
-          </p>
+        <div class="slider-control">
+          <label for="sorts">
+            <span class="slider-label">Speed</span>
+            <span class="slider-value" id="sorts-val">50</span>
+          </label>
+          <input type="range" id="sorts" min="1" max="100" step="1" value="50" />
         </div>
       </div>
 
-      <div class="sortbtn">
-        <button
-          type="button"
-          class="navbar navbtn bubsort"
-          onClick="bubbleSort()"
-        >
-          Bubble Sort
+      <div class="control-group control-group--algorithms">
+        <button type="button" class="btn btn--algo" onClick="bubbleSort()">
+          Bubble
         </button>
-        <button
-          type="button"
-          class="navbar navbtn inssort"
-          onClick="insertionSort()"
-        >
-          Insertion Sort
+        <button type="button" class="btn btn--algo" onClick="insertionSort()">
+          Insertion
         </button>
-        <button
-          type="button"
-          class="navbar navbtn slcsort"
-          onClick="selectionSort()"
-        >
-          Selection Sort
+        <button type="button" class="btn btn--algo" onClick="selectionSort()">
+          Selection
         </button>
-        <button
-          type="button"
-          class="navbar navbtn quicsort"
-          onClick="quickSort()"
-        >
-          Quick Sort
+        <button type="button" class="btn btn--algo" onClick="quickSort()">
+          Quick
         </button>
-        <button
-          type="button"
-          class="navbar navbtn mrgsort"
-          onClick="mergeSort()"
-        >
-          Merge Sort
+        <button type="button" class="btn btn--algo" onClick="mergeSort()">
+          Merge
         </button>
       </div>
-    </div>
+    </nav>
 
-    <div class="content_container">
+    <main class="visualizer">
       <div class="content"></div>
-    </div>
+    </main>
 
-    <script type="text/javascript" src="js/insertion.js"></script>
-    <script type="text/javascript" src="js/selection.js"></script>
-    <script type="text/javascript" src="js/quick.js"></script>
-    <script type="text/javascript" src="js/merge.js"></script>
-    <script type="text/javascript" src="js/bubble.js"></script>
-    <script type="text/javascript" src="app.js"></script>
-  </body>
+    <footer class="footer">
+      <span class="footer-text">// built to learn, built to visualize</span>
+    </footer>
+  </div>
+
+  <script type="text/javascript" src="js/insertion.js"></script>
+  <script type="text/javascript" src="js/selection.js"></script>
+  <script type="text/javascript" src="js/quick.js"></script>
+  <script type="text/javascript" src="js/merge.js"></script>
+  <script type="text/javascript" src="js/bubble.js"></script>
+  <script type="text/javascript" src="app.js"></script>
+</body>
+
 </html>
